@@ -1,0 +1,20 @@
+Steps on how to install the LM3886:
+1. Download and extract the zip file
+2. Copy the LM3886.lib file to the "LTSpiceXVII/lib/sub/" directory. (This directory is probably in "C:/Program Files/LTC/LTSpiceXVII", but might be in a different location depending on how you installed LTSpice)
+3. Copy the LM3886.asy file to the "LTSpiceXVII/lib/sym/" directory.
+4. Restart LTSpice
+5. Now when you add a symbol (through the small AND-gate on the top right of the toolbar), you can add the LM3886
+
+The LM3886 model has 9 visible pins:
+	V+ = connect to Vdd (also known as Vcc)
+	V- = connect to Vee
+	Pin 3 = the output
+	G = ground
+	- = inverting input
+	+ = non-inverting input
+	M = Mute pin.	
+
+
+Disclaimer: At the end of the simulation, the program gives errors about like "ERROR: Node U1:AV1 is floating and connected to current source G:U1:RU1". But you can ignore those. The data that you export is still good.
+
+You can use the LTSpice Python library ( https://pypi.org/project/ltspice ) to directly convert your .log output file from LTSpice. BE AWARE THAT EVERY TIME YOU RUN A NEW SIMULATION, THE LOG FILE IS OVERWRITTEN. IF YOU WANT TO SAVE THE LOG FILE, YOU HAVE TO COPY IT TO ANOTHER LOCATION.
