@@ -1,9 +1,0 @@
-ERROR: Node U1:AV1 is floating and connected to current source G:U1:RU1
-ERROR: Node U1:OVER_CLAMP is floating and connected to current source G:U1:RU2
-ERROR: Node U1:P0ZP1 is floating and connected to current source G:U1:_G5
-ERROR: Node U1:CLAW_CLAMP is floating and connected to current source G:U1:_G6
-ERROR: Node U1:VSENSE is floating and connected to current source G:U1:_G3
-ERROR: Node U1:P0Z is floating and connected to current source G:U1:_G4
-ERROR: Node U1:CL_CLAMP is floating and connected to current source G:U1:_G7
-ERROR: Node U1:UZ_N100 is floating and connected to current source G:U1:RUZ_RF1
-ERROR: Node U1:UZ_N102 is floating and connected to current source G:U1:RUZ_RF2

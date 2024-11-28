@@ -1,9 +1,10 @@
 Steps on how to install the LM3886:
-1. Download and extract the zip file
-2. Copy the LM3886.lib file to the "LTSpiceXVII/lib/sub/" directory. (This directory is probably in "C:/Program Files/LTC/LTSpiceXVII", but might be in a different location depending on how you installed LTSpice)
-3. Copy the LM3886.asy file to the "LTSpiceXVII/lib/sym/" directory.
-4. Restart LTSpice
-5. Now when you add a symbol (through the small AND-gate on the top right of the toolbar), you can add the LM3886
+0. Run the 'install.bat' file. If you have done this, you can skip to step 3.
+1. Copy the LM3886.lib file to the "LTSpice/lib/sub/" directory. (This directory is probably in "%LocalAppData%\LTspice\lib", but might be in a different location depending on how you installed LTSpice)
+2. Copy the LM3886.asy file to the "LTSpice/lib/sym/" directory.
+3. Restart LTSpice
+4. Run the example in this folder called "example.asc".
+5. Now when you add a component (shortcut P, the chip icon right to the diode in the toolbar), you can add the LM3886
 
 The LM3886 model has 9 visible pins:
 	V+ = connect to Vdd (also known as Vcc)
