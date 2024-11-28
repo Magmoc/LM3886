@@ -12,6 +12,12 @@
 *
 ** Released by: WEBENCH (R) Design Center, Texas Instruments Inc.
 * Date:             2012-02-28
+
+* Edited by:        Erik van Weelderen
+* Email:            erikvanweelderen@hotmail.nl
+* Github:           https://github.com/Magmoc
+* Date:             2024-11-28
+
 * Model Type:       ALL IN ONE
 * Simulator:        PSPICE
 * Simulator Version: 16.2.0.p001
@@ -46,6 +52,29 @@
 *$
 .SUBCKT LM3886 INP INN VCC VEE GND OUT MUTE
 *
+
+* Additions by Erik van Weelderen:
+* Adapted from https://forum.allaboutcircuits.com/threads/ltspice-floating-node.138032/
+*
+* Add pull down resistors for the following ports
+* If they are not present, LTSpice gives errors.
+* The errors are there because at the end of simulation,
+* the sources connected to these nodes convert to high impedance.
+* This leaves the nodes floating.
+* However, LTSpice does not allow floating nodes to be connected
+* to sources. So by adding a pull down resistor with a large value,
+* this is solved.
+
+R_PD_AV1            AV1         GND 100MEG
+R_PD_OVER_CLAMP     OVER_CLAMP  GND 100MEG
+R_PD_P0ZP1          P0ZP1       GND 100MEG
+R_PD_CLAW_CLAMP     CLAW_CLAMP  GND 100MEG
+R_PD_VSENSE         VSENSE      GND 100MEG
+R_PD_P0Z            P0Z         GND 100MEG
+R_PD_CL_CLAMP       CL_CLAMP    GND 100MEG
+R_PD_UZ_N100        UZ_N100     GND 100MEG
+R_PD_UZ_N102        UZ_N102     GND 100MEG
+
 V_Vos          INP2       INP_CMRR  -1056uVdc
 R_Rinp         INP        INP1       1  
 R_Rinn         INN        INN1       1  
@@ -78,8 +107,8 @@ X_Ug0          INP_CMRR   INN3       GND   AV1        VCCS_LIMIT
 +  PARAMS:     GAIN=10e-6 IPOS=0.5   INEG=-0.5
 X_Ug4          AV1        GND        GND   OVER_CLAMP VCCS_LIMIT 
 +  PARAMS:     GAIN=26.5u IPOS=111u  INEG=-108.1u
-GRU1           GND        AV1        VALUE={V(GND ,AV1       )/1e6}
-GRU2           GND        OVER_CLAMP VALUE={V(GND, OVER_CLAMP)/2.1e9}
+GRU1           GND        AV1        VALUE={-V(AV1)/1e6}
+GRU2           GND        OVER_CLAMP VALUE={V(OVER_CLAMP)/2.1e9}
 C_Cc1          GND        OVER_CLAMP 5.3p   
 C_Cc2          P0ZP1      GND        5e-15   
 C_Cc3          CLAW_CLAMP GND        995f   
@@ -90,11 +119,11 @@ G_G4           GND        P0Z        VSENSE     GND  1u
 G_G5           GND        P0ZP1      P0Z        GND  1u
 G_G6           GND        CLAW_CLAMP P0ZP1      GND  1m
 G_G7           GND        CL_CLAMP   CLAW_CLAMP GND  1m
-GRU3           VSENSE     GND        VALUE={V(VSENSE,GND)/1e6}
-GRU5           GND        P0Z        VALUE={V(GND,   P0Z)/1e6}
-GRU6           P0ZP1      GND        VALUE={V(P0ZP1, GND)/1e6}
-GRU7           CLAW_CLAMP GND        VALUE={V(CLAW_CLAMP,GND)/1e3}
-GRU8           CL_CLAMP   GND        VALUE={V(CL_CLAMP,  GND)  /1e3}
+GRU3           VSENSE     GND        VALUE={V(VSENSE)/1e6}
+GRU5           GND        P0Z        VALUE={-V(P0Z)/1e6}
+GRU6           P0ZP1      GND        VALUE={V(P0ZP1)/1e6}
+GRU7           CLAW_CLAMP GND        VALUE={V(CLAW_CLAMP)/1e3}
+GRU8           CL_CLAMP   GND        VALUE={V(CL_CLAMP)  /1e3}
 *
 X_UpwrDn       CL_CLAMP   GND        MUTE   N90  GND  VCC VEE HPA_PD_SGNL 
 *X_Uthd        N90        GND        VCLP   GND  EPOLY1
@@ -113,14 +142,14 @@ R_Uz_Rb        Uz_N104    Uz_VZO_4   10
 R_Uz_Rm        Uz_VZO_3   Uz_VZO_4   10  
 X_Uz_S1        N92        GND        Uz_N106   Uz_VZO_3 Zout_Uz_S1 
 X_Uz_S2        N92        GND        Uz_N104   Uz_VZO_3 Zout_Uz_S2 
-GRUz_Rg1       GND        Uz_N100    VALUE={V(GND     ,Uz_N100)/10e6}
+GRUz_Rg1       GND        Uz_N100    VALUE={-V(Uz_N100)/10e6}
 GRUz_Rf1       Uz_N100    Uz_VZO_1   VALUE={V(Uz_N100 ,Uz_VZO_1)/10e6}
 GRUz_Rg2       Uz_VZO_2   Uz_N102    VALUE={V(Uz_VZO_2,Uz_N102 )/1e6}
 GRUz_Rf2       Uz_N102    Uz_VZO_3   VALUE={V(Uz_N102 ,Uz_VZO_3)/1e6}
-X_Uz_Uamp1     VCLP       Uz_N100    Uz_VZO_1,GND  VCVS_LIMIT 
+X_Uz_Uamp1     VCLP       Uz_N100    Uz_VZO_1   GND  VCVS_LIMIT 
 +  PARAMS:     GAIN=1e6   VPOS=6e4   VNEG=-6e4
 X_Uz_Uamp2     GND        Uz_N102    Uz_VZO_3   GND  VCVS_LIMIT 
-+  PARAMS:     GAIN=1e6V  VPOS=6e4   VNEG=-6e4
++  PARAMS:     GAIN=1e6  VPOS=6e4   VNEG=-6e4
 *
 .ENDS LM3886
 *$
@@ -161,7 +190,12 @@ EINT 3 4 POLY(1) (1,2) (0 1 0 0)
 *
 .subckt D_ideal A C
 D1 A C DNOM
-.MODEL DNOM D (IS=1e-16 RS=1e-3 N=1e-3)
+
+* Adaptation from Erik van Weelderen:
+* Change N=1e-3 to N=1e-1.
+* LTSpice gave an error about limiting the value to 1e-1,
+* So just change it to that value instead.
+.MODEL DNOM D (IS=1e-16 RS=1e-3 N=1e-1)
 .ENDS D_ideal
 *
 *$
